@@ -12,17 +12,32 @@
             height: 100vh;
             margin: 0;
             background-color: black;
+            position: relative;
         }
         img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
         }
+        /* Botão de tela cheia */
+        .fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <img id="slideshow" src="" alt="Slideshow">
-    
+    <button class="fullscreen-btn" id="fullscreen-toggle">Tela Cheia</button>
+
     <script>
         const images = [
             "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg",
@@ -35,15 +50,31 @@
         const imageElement = document.getElementById("slideshow");
 
         function changeImage() {
-            index = (index + 1) % images.length; // Avança no array e volta ao início quando chega ao fim
+            index = (index + 1) % images.length;
             imageElement.src = images[index];
         }
 
         // Inicia com a primeira imagem
         imageElement.src = images[0];
 
-        // Troca a imagem a cada 30 segundos (30000ms)
+        // Troca a imagem a cada 30 segundos
         setInterval(changeImage, 30000);
+
+        // Função para alternar entre entrar e sair do modo tela cheia
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Erro ao entrar em tela cheia: ${err.message}`);
+                });
+                document.getElementById("fullscreen-toggle").innerText = "Sair da Tela Cheia";
+            } else {
+                document.exitFullscreen();
+                document.getElementById("fullscreen-toggle").innerText = "Tela Cheia";
+            }
+        }
+
+        // Adiciona o evento de clique ao botão
+        document.getElementById("fullscreen-toggle").addEventListener("click", toggleFullscreen);
     </script>
 </body>
 </html>
