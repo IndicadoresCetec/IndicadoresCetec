@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slideshow Automático</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            transition: opacity 1s;
+        }
+    </style>
+</head>
+<body>
+    <img id="slideshow" src="" alt="Slideshow">
+    
+    <script>
+        const images = [
+            "https://drive.google.com/file/d/1Ud7Xue4--vCRsIcYdZad9fOE-25C63kL/view?usp=drive_link",
+            "https://drive.google.com/file/d/1t5Pi5JFespAWulBErnH85ikig4AtVE-M/view?usp=drive_link",
+            "https://drive.google.com/file/d/18cdDzpq-RB8XaJ88VRJi8zMig5GnV1eZ/view?usp=drive_link", 
+            "https://drive.google.com/file/d/1p8Wxrwq7A8uwTJJuT2f4NsGQqGkZ1X1Y/view?usp=drive_link"
+        ];
+        let index = 0;
+        const imgElement = document.getElementById("slideshow");
+        
+        function changeImage() {
+            imgElement.style.opacity = 0;
+            setTimeout(() => {
+                imgElement.src = images[index];
+                imgElement.style.opacity = 1;
+                index = (index + 1) % images.length;
+            }, 1000);
+        }
+        
+        imgElement.src = images[0];
+        setInterval(changeImage, 30000); // Muda a imagem a cada 5 segundos
+    </script>
+</body>
+</html>
