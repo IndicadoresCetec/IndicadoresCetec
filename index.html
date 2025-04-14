@@ -93,19 +93,39 @@
             imageElement.src = images[index];
         }
 
-        // Função para verificar a senha
+        function iniciarApresentacao() {
+            loginContainer.style.display = "none";
+            imageElement.style.display = "block";
+            fullscreenButton.style.display = "block";
+            imageElement.src = images[0];
+            setInterval(changeImage, 30000); // troca a imagem a cada 30 segundos
+
+            // Atualiza a página a cada 1 hora
+            setTimeout(() => {
+                location.reload();
+            }, 3600000);
+        }
+
         function checkPassword() {
             const passwordInput = document.getElementById("password").value;
             if (passwordInput === "Cetec@2025") {
-                loginContainer.style.display = "none";
-                imageElement.style.display = "block";
-                fullscreenButton.style.display = "block";
-                imageElement.src = images[0];
-                setInterval(changeImage, 30000);
+                localStorage.setItem("lastLogin", new Date().getTime()); // salva timestamp
+                iniciarApresentacao();
             } else {
                 alert("Senha incorreta!");
             }
         }
+
+        // Checa se login foi feito nas últimas 24h
+        window.onload = function () {
+            const lastLogin = localStorage.getItem("lastLogin");
+            const now = new Date().getTime();
+            const hours24 = 24 * 60 * 60 * 1000;
+
+            if (lastLogin && now - parseInt(lastLogin) < hours24) {
+                iniciarApresentacao();
+            }
+        };
 
         // Alternar modo tela cheia
         function toggleFullscreen() {
