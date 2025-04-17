@@ -120,7 +120,7 @@
         window.onload = function () {
             const lastLogin = localStorage.getItem("lastLogin");
             const now = new Date().getTime();
-            const hours24 = 24 * 60 * 60 * 1000;
+            const hours24 = 7 * 24 * 60 * 60 * 1000;
 
             if (lastLogin && now - parseInt(lastLogin) < hours24) {
                 iniciarApresentacao();
