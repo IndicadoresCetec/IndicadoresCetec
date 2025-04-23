@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apresentação de Imagens</title>
+    <title>Apresentação de Imagens e Vídeo</title>
     <style>
         body {
             display: flex;
@@ -14,13 +14,12 @@
             background-color: black;
             position: relative;
         }
-        img {
+        img, video {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
             display: none;
         }
-        /* Tela de Login */
         .login-container {
             position: absolute;
             background: white;
@@ -44,7 +43,6 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        /* Botão de tela cheia */
         .fullscreen-btn {
             position: absolute;
             top: 10px;
@@ -70,37 +68,52 @@
     </div>
 
     <!-- Slideshow -->
-    <img id="slideshow" src="" alt="Slideshow">
+    <img id="slideshow-img" src="" alt="Slideshow">
+    <video id="slideshow-video" muted controls style="display: none;"></video>
     <button class="fullscreen-btn" id="fullscreen-toggle">Tela Cheia</button>
 
     <script>
-        const images = [
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/Aniversariantes-do-m%C3%AAs.jpg"
+        const itens = [
+            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg" },
+            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg" },
+            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg" },
+            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg" },
+            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg" },
+            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/Aniversariantes-do-m%C3%AAs.jpg" },
+            { type: "video", src: "https://drive.google.com/uc?export=preview&id=1X7NgKNRJaw1B8prluIBPSeZ0PE3IJhHB" },
+            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PALPH.jpg" }
         ];
 
         let index = 0;
-        const imageElement = document.getElementById("slideshow");
+        const imgEl = document.getElementById("slideshow-img");
+        const vidEl = document.getElementById("slideshow-video");
         const loginContainer = document.getElementById("login-container");
         const fullscreenButton = document.getElementById("fullscreen-toggle");
 
-        function changeImage() {
-            index = (index + 1) % images.length;
-            imageElement.src = images[index];
+        function changeItem() {
+            const item = itens[index];
+            index = (index + 1) % itens.length;
+
+            if (item.type === "image") {
+                vidEl.pause();
+                vidEl.style.display = "none";
+                imgEl.style.display = "block";
+                imgEl.src = item.src;
+                setTimeout(changeItem, 30000); // espera 30 segundos
+            } else if (item.type === "video") {
+                imgEl.style.display = "none";
+                vidEl.style.display = "block";
+                vidEl.src = item.src;
+                vidEl.play();
+                vidEl.onended = () => setTimeout(changeItem, 1000);
+            }
         }
 
         function iniciarApresentacao() {
             loginContainer.style.display = "none";
-            imageElement.style.display = "block";
             fullscreenButton.style.display = "block";
-            imageElement.src = images[0];
-            setInterval(changeImage, 30000); // troca a imagem a cada 30 segundos
+            changeItem();
 
-            // Atualiza a página a cada 1 hora
             setTimeout(() => {
                 location.reload();
             }, 3600000);
@@ -109,25 +122,23 @@
         function checkPassword() {
             const passwordInput = document.getElementById("password").value;
             if (passwordInput === "Cetec@2025") {
-                localStorage.setItem("lastLogin", new Date().getTime()); // salva timestamp
+                localStorage.setItem("lastLogin", new Date().getTime());
                 iniciarApresentacao();
             } else {
                 alert("Senha incorreta!");
             }
         }
 
-        // Checa se login foi feito nas últimas 24h
         window.onload = function () {
             const lastLogin = localStorage.getItem("lastLogin");
             const now = new Date().getTime();
-            const hours24 = 7 * 24 * 60 * 60 * 1000;
+            const hours7days = 7 * 24 * 60 * 60 * 1000;
 
-            if (lastLogin && now - parseInt(lastLogin) < hours24) {
+            if (lastLogin && now - parseInt(lastLogin) < hours7days) {
                 iniciarApresentacao();
             }
         };
 
-        // Alternar modo tela cheia
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
@@ -142,4 +153,3 @@
     </script>
 </body>
 </html>
-
