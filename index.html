@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apresentação de Imagens e Vídeo</title>
+    <title>Apresentação de Imagens</title>
     <style>
         body {
             display: flex;
@@ -14,7 +14,7 @@
             background-color: black;
             position: relative;
         }
-        img, video {
+        img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
@@ -56,6 +56,11 @@
             border-radius: 5px;
             display: none;
         }
+        #video-container {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
@@ -67,53 +72,60 @@
         <button onclick="checkPassword()">Entrar</button>
     </div>
 
+    <!-- Player do Streamable -->
+    <div id="video-container">
+        <div style="position:relative; width:100%; height:0px; padding-bottom:56.250%">
+            <iframe 
+                allow="fullscreen;autoplay" allowfullscreen 
+                height="100%" 
+                src="https://streamable.com/e/xsuntg?autoplay=1&nocontrols=1" 
+                width="100%" 
+                style="border:none; width:100%; height:100%; position:absolute; left:0px; top:0px; overflow:hidden;">
+            </iframe>
+        </div>
+    </div>
+
     <!-- Slideshow -->
-    <img id="slideshow-img" src="" alt="Slideshow">
-    <video id="slideshow-video" muted controls style="display: none;"></video>
+    <img id="slideshow" src="" alt="Slideshow">
     <button class="fullscreen-btn" id="fullscreen-toggle">Tela Cheia</button>
 
     <script>
-        const itens = [
-            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg" },
-            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg" },
-            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg" },
-            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg" },
-            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg" },
-            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/Aniversariantes-do-m%C3%AAs.jpg" },
-            { type: "video", src: "https://github.com/IndicadoresCetec/IndicadoresCetec/raw/refs/heads/main/Design%20sem%20nome%20(5).mp4" },
-            { type: "image", src: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PALPH.jpg" }
+        const images = [
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg",
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg",
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg",
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg",
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg",
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/Aniversariantes-do-m%C3%AAs.jpg",
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PALPH.jpg",
+            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/promo%C3%A7%C3%A3o_especial_post.jpg"
         ];
 
         let index = 0;
-        const imgEl = document.getElementById("slideshow-img");
-        const vidEl = document.getElementById("slideshow-video");
+        const imageElement = document.getElementById("slideshow");
         const loginContainer = document.getElementById("login-container");
         const fullscreenButton = document.getElementById("fullscreen-toggle");
+        const videoContainer = document.getElementById("video-container");
 
-        function changeItem() {
-            const item = itens[index];
-            index = (index + 1) % itens.length;
-
-            if (item.type === "image") {
-                vidEl.pause();
-                vidEl.style.display = "none";
-                imgEl.style.display = "block";
-                imgEl.src = item.src;
-                setTimeout(changeItem, 30000); // espera 30 segundos
-            } else if (item.type === "video") {
-                imgEl.style.display = "none";
-                vidEl.style.display = "block";
-                vidEl.src = item.src;
-                vidEl.play();
-                vidEl.onended = () => setTimeout(changeItem, 1000);
-            }
+        function changeImage() {
+            index = (index + 1) % images.length;
+            imageElement.src = images[index];
         }
 
         function iniciarApresentacao() {
             loginContainer.style.display = "none";
             fullscreenButton.style.display = "block";
-            changeItem();
+            videoContainer.style.display = "block";
 
+            // Espera a duração real do vídeo (15 segundos)
+            setTimeout(() => {
+                videoContainer.style.display = "none";
+                imageElement.style.display = "block";
+                imageElement.src = images[0];
+                setInterval(changeImage, 30000); // muda imagem a cada 30 segundos
+            }, 15000);
+
+            // Recarrega a página a cada 1 hora
             setTimeout(() => {
                 location.reload();
             }, 3600000);
@@ -132,9 +144,8 @@
         window.onload = function () {
             const lastLogin = localStorage.getItem("lastLogin");
             const now = new Date().getTime();
-            const hours7days = 7 * 24 * 60 * 60 * 1000;
-
-            if (lastLogin && now - parseInt(lastLogin) < hours7days) {
+            const hours24 = 7 * 24 * 60 * 60 * 1000;
+            if (lastLogin && now - parseInt(lastLogin) < hours24) {
                 iniciarApresentacao();
             }
         };
