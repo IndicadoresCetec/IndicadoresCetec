@@ -1,166 +1,164 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apresentação de Imagens</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: black;
-            position: relative;
-        }
-        img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: none;
-        }
-        .login-container {
-            position: absolute;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-        input {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 200px;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .fullscreen-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 5px;
-            display: none;
-        }
-        #video-container {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação de Imagens e Vídeo</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: black;
+      position: relative;
+    }
+    img, .video-container {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+    .login-container {
+      position: absolute;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .fullscreen-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <!-- Tela de Login -->
-    <div class="login-container" id="login-container">
-        <h2>Digite a senha</h2>
-        <input type="password" id="password" placeholder="Senha">
-        <br>
-        <button onclick="checkPassword()">Entrar</button>
-    </div>
+  <!-- Tela de Login -->
+  <div class="login-container" id="login-container">
+    <h2>Digite a senha</h2>
+    <input type="password" id="password" placeholder="Senha">
+    <br>
+    <button onclick="checkPassword()">Entrar</button>
+  </div>
 
-    <!-- Player do Streamable -->
-    <div id="video-container">
-        <div style="position:relative; width:100%; height:0px; padding-bottom:56.250%">
-            <iframe 
-                allow="fullscreen;autoplay" allowfullscreen 
-                height="100%" 
-                src="https://streamable.com/e/xsuntg?autoplay=1&nocontrols=1" 
-                width="100%" 
-                style="border:none; width:100%; height:100%; position:absolute; left:0px; top:0px; overflow:hidden;">
-            </iframe>
-        </div>
-    </div>
+  <!-- Slideshow de Imagens -->
+  <img id="slideshow" src="" alt="Slideshow">
 
-    <!-- Slideshow -->
-    <img id="slideshow" src="" alt="Slideshow">
-    <button class="fullscreen-btn" id="fullscreen-toggle">Tela Cheia</button>
+  <!-- Vídeo -->
+  <div class="video-container" id="video-container">
+    <iframe 
+      allowfullscreen 
+      allow="autoplay"
+      src="https://streamable.com/e/xsuntg?autoplay=1" 
+      style="border:none; width:100vw; height:100vh;">
+    </iframe>
+  </div>
 
-    <script>
-        const images = [
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/Aniversariantes-do-m%C3%AAs.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PALPH.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/promo%C3%A7%C3%A3o_especial_post.jpg"
-        ];
+  <!-- Botão de Tela Cheia -->
+  <button class="fullscreen-btn" id="fullscreen-toggle">Tela Cheia</button>
 
-        let index = 0;
-        const imageElement = document.getElementById("slideshow");
-        const loginContainer = document.getElementById("login-container");
-        const fullscreenButton = document.getElementById("fullscreen-toggle");
-        const videoContainer = document.getElementById("video-container");
+  <script>
+    const images = [
+      "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg",
+      "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg",
+      "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg",
+      "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg",
+      "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg",
+      "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/Aniversariantes-do-m%C3%AAs.jpg",
+      "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PALPH.jpg"
+    ];
 
-        function changeImage() {
-            index = (index + 1) % images.length;
-            imageElement.src = images[index];
-        }
+    const slideshow = document.getElementById("slideshow");
+    const loginContainer = document.getElementById("login-container");
+    const fullscreenButton = document.getElementById("fullscreen-toggle");
+    const videoContainer = document.getElementById("video-container");
 
-        function iniciarApresentacao() {
-            loginContainer.style.display = "none";
-            fullscreenButton.style.display = "block";
-            videoContainer.style.display = "block";
+    let index = 0;
 
-            // Espera a duração real do vídeo (15 segundos)
-            setTimeout(() => {
-                videoContainer.style.display = "none";
-                imageElement.style.display = "block";
-                imageElement.src = images[0];
-                setInterval(changeImage, 30000); // muda imagem a cada 30 segundos
-            }, 45000);
+    function showNextItem() {
+      slideshow.style.display = "none";
+      videoContainer.style.display = "none";
 
-            // Recarrega a página a cada 1 hora
-            setTimeout(() => {
-                location.reload();
-            }, 3600000);
-        }
+      if (index === images.length) {
+        // Exibe vídeo
+        videoContainer.style.display = "block";
+        index = 0; // reinicia depois do vídeo
+      } else {
+        // Exibe imagem
+        slideshow.src = images[index];
+        slideshow.style.display = "block";
+        index++;
+      }
+    }
 
-        function checkPassword() {
-            const passwordInput = document.getElementById("password").value;
-            if (passwordInput === "Cetec@2025") {
-                localStorage.setItem("lastLogin", new Date().getTime());
-                iniciarApresentacao();
-            } else {
-                alert("Senha incorreta!");
-            }
-        }
+    function iniciarApresentacao() {
+      loginContainer.style.display = "none";
+      fullscreenButton.style.display = "block";
+      showNextItem();
+      setInterval(showNextItem, 30000); // troca a cada 30 segundos
 
-        window.onload = function () {
-            const lastLogin = localStorage.getItem("lastLogin");
-            const now = new Date().getTime();
-            const hours24 = 7 * 24 * 60 * 60 * 1000;
-            if (lastLogin && now - parseInt(lastLogin) < hours24) {
-                iniciarApresentacao();
-            }
-        };
+      setTimeout(() => {
+        location.reload();
+      }, 3600000); // atualiza a cada 1h
+    }
 
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-                fullscreenButton.innerText = "Sair da Tela Cheia";
-            } else {
-                document.exitFullscreen();
-                fullscreenButton.innerText = "Tela Cheia";
-            }
-        }
+    function checkPassword() {
+      const passwordInput = document.getElementById("password").value;
+      if (passwordInput === "Cetec@2025") {
+        localStorage.setItem("lastLogin", new Date().getTime());
+        iniciarApresentacao();
+      } else {
+        alert("Senha incorreta!");
+      }
+    }
 
-        fullscreenButton.addEventListener("click", toggleFullscreen);
-    </script>
+    window.onload = function () {
+      const lastLogin = localStorage.getItem("lastLogin");
+      const now = new Date().getTime();
+      const hours24 = 7 * 24 * 60 * 60 * 1000;
+
+      if (lastLogin && now - parseInt(lastLogin) < hours24) {
+        iniciarApresentacao();
+      }
+    };
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        fullscreenButton.innerText = "Sair da Tela Cheia";
+      } else {
+        document.exitFullscreen();
+        fullscreenButton.innerText = "Tela Cheia";
+      }
+    }
+
+    fullscreenButton.addEventListener("click", toggleFullscreen);
+  </script>
 </body>
 </html>
