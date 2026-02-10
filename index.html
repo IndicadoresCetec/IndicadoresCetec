@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apresentação de Imagens</title>
+    <title>Apresentação CETEC</title>
+
     <style>
         body {
             display: flex;
@@ -14,17 +15,20 @@
             background-color: black;
             position: relative;
         }
+
         .media {
             width: 100%;
             height: 100%;
             display: none;
             position: absolute;
         }
+
         img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
+
         .login-container {
             position: absolute;
             background: white;
@@ -34,18 +38,21 @@
             text-align: center;
             z-index: 10;
         }
+
         input, button {
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
             width: 200px;
         }
+
         button {
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
         }
+
         .fullscreen-btn {
             position: absolute;
             top: 10px;
@@ -62,7 +69,9 @@
         }
     </style>
 </head>
+
 <body>
+
     <!-- Tela de Login -->
     <div class="login-container" id="login-container">
         <h2>Digite a senha</h2>
@@ -76,38 +85,74 @@
     <button class="fullscreen-btn" id="fullscreen-toggle">Tela Cheia</button>
 
     <script>
+        /* ===============================
+           CONFIGURAÇÃO DAS IMAGENS
+           tempo em milissegundos
+           =============================== */
+
         const images = [
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/ANIVERSARIANTES%20DO%20MES.jpeg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.0_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg",
-            "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg"
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/ANIVERSARIANTES%20DO%20MES.jpeg",
+                tempo: 15000 // 15s
+            },
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/Resumo%20PLR_page-0001.jpg",
+                tempo: 60000 // 15s
+            },
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR_page-0001.jpg",
+                tempo: 60000 // 60s
+            },
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.0_page-0001.jpg",
+                tempo: 60000 // 60s
+            },
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/PLR.1_page-0001.jpg",
+                tempo: 60000 // 60s
+            },
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES_page-0001.jpg",
+                tempo: 60000 // 60s
+            },
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/INDICADORES.1_page-0001.jpg",
+                tempo: 60000 // 60s
+            },
+            {
+                url: "https://raw.githubusercontent.com/IndicadoresCetec/IndicadoresCetec/refs/heads/main/RBC_page-0001.jpg",
+                tempo: 60000 // 60s
+            }
         ];
 
         let index = 0;
+        let slideshowTimeout;
+
         const imageElement = document.getElementById("slideshow");
         const loginContainer = document.getElementById("login-container");
         const fullscreenButton = document.getElementById("fullscreen-toggle");
 
-        function changeImage() {
-            index = (index + 1) % images.length;
-            imageElement.src = images[index];
+        function mostrarImagem() {
+            imageElement.src = images[index].url;
+
+            slideshowTimeout = setTimeout(() => {
+                index = (index + 1) % images.length;
+                mostrarImagem();
+            }, images[index].tempo);
         }
 
         function iniciarSlideshow() {
             imageElement.style.display = "block";
             fullscreenButton.style.display = "block";
-            imageElement.src = images[0];
-            setInterval(changeImage, 30000); // troca a imagem a cada 30s
+            index = 0;
+            mostrarImagem();
         }
 
         function iniciarApresentacao() {
             loginContainer.style.display = "none";
             iniciarSlideshow();
 
-            // Atualiza a página a cada 1 hora
+            // Recarrega a página a cada 1 hora
             setTimeout(() => {
                 location.reload();
             }, 3600000);
@@ -126,9 +171,9 @@
         window.onload = function () {
             const lastLogin = localStorage.getItem("lastLogin");
             const now = new Date().getTime();
-            const hours24 = 7 * 24 * 60 * 60 * 1000;
+            const validadeLogin = 7 * 24 * 60 * 60 * 1000; // 7 dias
 
-            if (lastLogin && now - parseInt(lastLogin) < hours24) {
+            if (lastLogin && now - parseInt(lastLogin) < validadeLogin) {
                 iniciarApresentacao();
             }
         };
@@ -145,19 +190,6 @@
 
         fullscreenButton.addEventListener("click", toggleFullscreen);
     </script>
+
 </body>
 </html>
-
-    </script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
